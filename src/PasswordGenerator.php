@@ -34,10 +34,10 @@ class PasswordGenerator
     /** @var string $url Url of word ressource */
     private string $url;
 
-    /** @var int $minLength Minimum length of a password */
+    /** @var int $minLength Minimum length of a word to be considered for the list */
     private int $minLength;
 
-    /** @var int $maxLength Maximum length of a password */
+    /** @var int $maxLength Maximum length of a word to be considered for the list */
     private int $maxLength;
 
     /** @var array $wordList Cache of the words */
@@ -52,6 +52,12 @@ class PasswordGenerator
     /** @var bool $verbose */
     private bool $verbose;
 
+    /** @var bool $appendWordlist If true the fetched words will be appended to the cached wordlist, rather than replacing the current file */
+    private bool $appendWordlist = false;
+
+    /** @var int $limitWordlist Limit the max number of words in the wordlist files, defaults to no limit */
+    private int $limitWordlist = 0;
+
     /**
      * Creates an instance of the password generator. You can pass an optional
      * array with values that should override the default values for the keys:
@@ -65,6 +71,10 @@ class PasswordGenerator
      *   <dd>The maxinum length of characters a word must have.</dd>
      *   <dt>wordCacheFile</dt>
      *   <dd>Filename of the cache file.</dd>
+     *   <dt>appendWordlist</dt>
+     *   <dd>If true, the fetched wordlist will be appended to the current one. If false, wordlist is generated from scratch.</dd>
+     *   <dt>limitWordlist</dt>
+     *   <dd>Int value declaring the maximum words the wordlist must contain. Useful when using appendWordList.</dd>
      *   <dt>httpRedirects</dt>
      *   <dd>Number of maximum HTTP redirects the script will follow.</dd>
      * </dl>
@@ -143,9 +153,21 @@ class PasswordGenerator
                     }
                 }
             }
-            $this->wordList = array_keys($wordlist);
+            if ((bool)$this->appendWordlist) {
+                $this->wordList = array_unique($this->wordList + array_keys($wordlist));
+            } else {
+                $this->wordList = array_keys($wordlist);
+            }
+            $wordlistLimit = (int)$this->limitWordlist;
+            if ($wordlistLimit > 0) {
+                // Shuffle the array to mix existing and new words, if in append mode
+                if ((bool)$this->appendWordlist) {
+                    shuffle($this->wordList);
+                }
+                $this->wordList = array_slice($this->wordList, 0, $wordlistLimit);
+            }
 
-            if (count($wordlist) > 0) {
+            if (count($this->wordList) > 0) {
                 $this->save_wordlist();
             }
         } catch (Exception $e) {

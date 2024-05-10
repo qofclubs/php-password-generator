@@ -51,3 +51,15 @@ $gen = PasswordGenerator::CACHED('mywords.json');
 
 // generate a password with custom pattern
 echo $gen->generate('wiwsw'), "\n";
+
+// Append NYTimes feed to the last wordlist, limiting to 700 items max
+$gen = new PasswordGenerator([
+    'wordCacheFile'  => 'mywords.json',
+    'url'            => 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
+    'minLength'      => 3,
+    'maxLength'      => 8,
+    'appendWordlist' => true,
+    'limitWordlist'  => 700,
+]);
+
+echo $gen->generate('wiws'), "\n";
