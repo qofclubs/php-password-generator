@@ -79,6 +79,9 @@ Optionally you can specify *wordCacheFile* to control the location and name of t
 
 To a custom instance you can pass an optional boolean parameter *fetch*. When false, the cached wordlist will be preferred but falls back to fetching if it could not be loaded.
 
+You can also mix different RSS sources into the same wordlist file with the `appendWordlist` parameter, increasing entropy, or regularly rebuild your cache file from time to time to feed it with new words. Altought having more words is always desirable,
+you can limit the number of items in the wordlist with the `limitWordlist` configuration parameter. When using append, wordlist is shuffled before being limited to the desired quantity.
+
 ```php
 include 'PasswordGenerator.php';
 
@@ -90,6 +93,16 @@ $gen = PasswordGenerator::EN();
 echo 'Password 1: ', $gen->generate();
 echo 'Password 2: ', $gen->generate();
 echo 'Password 3: ', $gen->generate();
+
+// Append NYTimes feed to the specified wordlist, limiting to 7000 items max
+$gen = new PasswordGenerator([
+    'wordCacheFile'  => 'mywords.json',
+    'url'            => 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
+    'minLength'      => 3,
+    'maxLength'      => 8,
+    'appendWordlist' => true,
+    'limitWordlist'  => 7000,
+]);
 ```
 
 ### Caching
@@ -154,6 +167,15 @@ When creating an instance of PasswordGenerator you can provide the following par
 * **httpRedirects**
 
   Controls if and how many HTTP redirects should be followed during URL access. Defaults to *2*. To prevent following redirects set its value to *0*.
+
+* **appendWordlist**
+
+  If true, the fetched wordlist will be appended to the current one. If false, wordlist is generated from scratch.
+
+* **limitWordlist**
+
+  Int value declaring the maximum words the wordlist must contain. Useful when using appendWordList.
+
 
 ## License
 
