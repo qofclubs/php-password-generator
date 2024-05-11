@@ -67,9 +67,9 @@ $gen = PasswordGenerator::DE();
 
 // create instance with custom parameters
 $gen = new PasswordGenerator([
-	'url'       => 'https://www.tagesschau.de/newsticker.rdf',
-	'minLength' => 3,
-	'maxLength' => 6,
+    'url'       => 'https://www.tagesschau.de/newsticker.rdf',
+    'minLength' => 3,
+    'maxLength' => 6,
 ]);
 ```
 
@@ -142,10 +142,10 @@ use \Darkv\PhpPasswordGenerator\PasswordGenerator;
 
 // create instance with custom parameters
 $gen = new PasswordGenerator([
-	'url'           => 'https://www.some-url.com/source',
-	'minLength'     => 3,
-	'maxLength'     => 6,
-	'httpRedirects' => 0,
+    'url'           => 'https://www.some-url.com/source',
+    'minLength'     => 3,
+    'maxLength'     => 6,
+    'httpRedirects' => 0,
 ]);
 ```
 
