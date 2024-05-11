@@ -72,9 +72,11 @@ class PasswordGenerator
      *   <dt>wordCacheFile</dt>
      *   <dd>Filename of the cache file.</dd>
      *   <dt>appendWordlist</dt>
-     *   <dd>If true, the fetched wordlist will be appended to the current one. If false, wordlist is generated from scratch.</dd>
+     *   <dd>If true, the fetched wordlist will be appended to the an existing
+     *   one. If false, wordlist is generated from scratch.</dd>
      *   <dt>limitWordlist</dt>
-     *   <dd>Int value declaring the maximum words the wordlist must contain. Useful when using appendWordList.</dd>
+     *   <dd>Int value declaring the maximum number of words the wordlist may
+     *   contain. Useful when using appendWordList.</dd>
      *   <dt>httpRedirects</dt>
      *   <dd>Number of maximum HTTP redirects the script will follow.</dd>
      * </dl>
