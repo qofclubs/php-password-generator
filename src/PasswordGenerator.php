@@ -25,7 +25,7 @@ use InvalidArgumentException;
  * @example ./example/PasswordGenerator.example.php example Class in action.
  *
  * @author Johann Häger <johann.haeger@posteo.de>
- * @version 2.0.3
+ * @version 2.0.4
  * @since 1.0.1
  * @license MIT License
  */
