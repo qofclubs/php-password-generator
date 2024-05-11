@@ -56,7 +56,7 @@ class PasswordGenerator
     private bool $appendWordlist = false;
 
     /** @var int $limitWordlist Limit the max number of words in the wordlist files, defaults to no limit */
-    private int $limitWordlist = 0;
+    private int $limitWordlist = PHP_INT_MAX;
 
     /**
      * Creates an instance of the password generator. You can pass an optional
@@ -107,6 +107,9 @@ class PasswordGenerator
         if ($this->minLength > $this->maxLength) {
             throw new InvalidArgumentException(sprintf('Invalid word lengths: min=%s max=%s', $this->minLength, $this->maxLength));
         }
+        if ($this->limitWordlist < 1) {
+            throw new InvalidArgumentException(sprintf('Invalid limit for wordlist, must be at least 1: %s', $this->limitWordlist));
+        }
         $this->populate_wordlist();
     }
 
@@ -153,18 +156,15 @@ class PasswordGenerator
                     }
                 }
             }
-            if ((bool)$this->appendWordlist) {
+            if ($this->appendWordlist) {
                 $this->wordList = array_unique($this->wordList + array_keys($wordlist));
             } else {
                 $this->wordList = array_keys($wordlist);
             }
-            $wordlistLimit = (int)$this->limitWordlist;
-            if ($wordlistLimit > 0) {
-                // Shuffle the array to mix existing and new words, if in append mode
-                if ((bool)$this->appendWordlist) {
-                    shuffle($this->wordList);
-                }
-                $this->wordList = array_slice($this->wordList, 0, $wordlistLimit);
+            if (count($this->wordList) > $this->limitWordlist) {
+                // wordlist has more entries than wanted
+                shuffle($this->wordList);
+                $this->wordList = array_slice($this->wordList, 0, $this->limitWordlist);
             }
 
             if (count($this->wordList) > 0) {
