@@ -92,7 +92,6 @@ class PasswordGenerator
     public function __construct(array $params = [], bool $fetch = true, bool $verbose = false)
     {
         $this->verbose = $verbose;
-        set_error_handler(array($this, 'error_handler'));
         foreach ($params as $key => $value) {
             $this->$key = $value;
         }
